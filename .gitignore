@@ -1,0 +1,7 @@
+.idea/
+docker/db/
+TODO.md
+app-engine/vendor/*
+app-engine/composer-setup.php
+app-engine/composer.lock
+app-engine/composer.phar

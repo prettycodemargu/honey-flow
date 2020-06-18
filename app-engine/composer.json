@@ -1,0 +1,24 @@
+{
+    "name": "farlongy/code",
+    "description": "The personal finance system.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "farlongy",
+            "email": "farlongy@farlongy.local"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {
+        "ext-pdo": "*"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Db\\" : "Db",
+            "Model\\" : "Model",
+            "ApiModules\\" : "ApiModules",
+            "Helper\\" : "Helper"
+        }
+    }
+}

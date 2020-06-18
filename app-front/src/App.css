@@ -1,0 +1,95 @@
+
+nav li {
+  display: inline;
+  margin: .5rem;
+  padding: .3rem;
+  background: #EEECF9;
+}
+
+nav {
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.billet {
+  border : 1px solid #333086;
+  border-radius: .5rem;
+  margin : 0 0 1rem 0;
+  padding : 1rem;
+}
+
+.billet-title {
+  border-radius: .5rem;
+  background: #C5C2DB;
+  padding : 1rem;
+}
+
+.total {
+  padding : 1rem 0 0 0;
+  font-weight : bold;
+}
+
+.small {
+  font-size : 50%;
+}
+
+.spending-card {
+  border-radius: .5rem;
+  border: 1px solid #333086;
+  margin : 0 0 1rem 0;
+}
+
+.card-title {
+  border-radius: .5rem;
+  background: #C5C2DB;
+  padding : 1rem;
+  margin : 1rem;
+  font-weight : bold;
+}
+
+.btn-secondary {
+  margin: .5rem;
+  background: #0C0874;
+}
+
+.spending-input-name {
+  margin: .5rem;
+}
+
+.spending-input-sum {
+  width: 5rem;
+  margin: .5rem;
+}
+
+.container-list-page {
+  border-radius: .5rem;
+  border: 1px solid #333086;
+}
+
+.create-item {
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.create-item input {
+  margin-right: 1rem;
+}
+
+.col-list-page {
+  margin: auto 0;
+}
+
+.list-page-title {
+  margin: 2rem auto;
+  text-align: center;
+  min-width: 50rem;
+}
+
+select {
+  padding: .3rem;
+}
+
+.form-element {
+  display: inline;
+  margin-right: 2rem;
+}

@@ -1,0 +1,57 @@
+version: '3'
+services:
+  nginx-front:
+    image: nginx:1.17.8
+    ports:
+      - "8081:80"
+    volumes:
+      - ./app-front/build:/www
+      - ./docker/nginx-front/front.conf:/etc/nginx/conf.d/front.conf
+    networks:
+      net:
+        ipv4_address: 192.168.210.2
+  nginx:
+    image: nginx:1.17.8
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app-engine:/app-engine
+      - ./docker/nginx/site.conf:/etc/nginx/conf.d/site.conf
+    networks:
+      net:
+        ipv4_address: 192.168.210.3
+  php:
+    build:
+      context: docker/php-fpm
+    volumes:
+      - ./app-engine:/app-engine
+      - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/php-fpm/common.php:/etc/honey-flow/common.php
+    environment:
+      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
+    networks:
+      net:
+        ipv4_address: 192.168.210.4
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'honey-flow'
+      MYSQL_USER: 'services'
+      MYSQL_PASSWORD: '12345'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - ./docker/db:/var/lib/mysql
+    ports:
+      - "33060:3306"
+    networks:
+      net:
+        ipv4_address: 192.168.210.5
+networks:
+  net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.210.0/24
