@@ -8,9 +8,10 @@ use Exception;
  * Class Spending
  * @package Db\Repository
  */
-class Spending extends Base {
-
-    protected function setTable() {
+class Spending extends Base
+{
+    protected function setTable()
+    {
         $this->table = 'spending';
     }
 
@@ -23,8 +24,8 @@ class Spending extends Base {
      * @return array
      * @throws Exception
      */
-    public function getSpendingsGroupsByPeriod(int $dashboardId, string $dateStart, string $dateEnd) : array {
-
+    public function getSpendingsGroupsByPeriod(int $dashboardId, string $dateStart, string $dateEnd) : array
+    {
         $sql = "            
             SELECT
                 s.category_id as category_id, 
@@ -58,14 +59,10 @@ class Spending extends Base {
      * @return array
      * @throws Exception
      */
-    public function getSpendingsNumForCategories(array $categoriesIds, int $dashboardId, string $dateStart = '', string $dateEnd = '') {
-
+    public function getSpendingsNumForCategories(array $categoriesIds, int $dashboardId, string $dateStart = '', string $dateEnd = '')
+    {
         $categoriesIdsStr = implode(', ', $categoriesIds);
-    /**
-     * @param $dashboardId
-     * @return array
-     * @throws Exception
-     */
+
         $sql = "
                 SELECT category_id, COUNT(id) FROM " . $this->table . "
                 WHERE dashboard_id = " . $dashboardId . "

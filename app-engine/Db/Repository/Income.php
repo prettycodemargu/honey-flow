@@ -8,8 +8,8 @@ use Exception;
  * Class Income
  * @package Db\Repository
  */
-class Income extends Base {
-
+class Income extends Base
+{
     protected function setTable() {
         $this->table = 'income';
     }
@@ -20,8 +20,8 @@ class Income extends Base {
      * @return array
      * @throws Exception
      */
-    public function getIncomesNumBySources(array $sourcesIds, int $dashboardId) : array {
-
+    public function getIncomesNumBySources(array $sourcesIds, int $dashboardId) : array
+    {
         $sourcesIdsStr = implode(', ', $sourcesIds);
 
         $sql = "

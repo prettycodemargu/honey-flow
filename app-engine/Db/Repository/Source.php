@@ -20,7 +20,8 @@ class Source extends Base
      * @return array
      * @throws Exception
      */
-    public function getSources(int $dashboardId) : array {
+    public function getSources(int $dashboardId) : array
+    {
         $sql = "
             SELECT id, source_name FROM source
             WHERE dashboard_id = " . $dashboardId . "

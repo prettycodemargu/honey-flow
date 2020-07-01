@@ -8,9 +8,10 @@ use Exception;
  * Class Storage
  * @package Db\Repository
  */
-class Storage extends Base {
-
-    protected function setTable() {
+class Storage extends Base
+{
+    protected function setTable()
+    {
         $this->table = 'storage';
     }
 
@@ -19,7 +20,8 @@ class Storage extends Base {
      * @return array
      * @throws Exception
      */
-    public function getStorages(int $dashboardId) : array {
+    public function getStorages(int $dashboardId) : array
+    {
         $sql = "
             SELECT id, storage_name, amount, currency_digital_code, created
             FROM " . $this->table . "

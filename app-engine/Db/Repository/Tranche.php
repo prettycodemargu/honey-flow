@@ -8,11 +8,12 @@ use Exception;
  * Class Tranche
  * @package Db\Repository
  */
-class Tranche extends Base {
-
+class Tranche extends Base
+{
     private string $categoryTable = 'category';
 
-    protected function setTable() {
+    protected function setTable()
+    {
         $this->table = 'tranche';
     }
 
@@ -21,8 +22,8 @@ class Tranche extends Base {
      * @return array
      * @throws Exception
      */
-    public function getTranches(int $planId) : array {
-
+    public function getTranches(int $planId) : array
+    {
         $sql = "SELECT 
             t.id,
             t.category_id as category_id, 
@@ -50,8 +51,8 @@ class Tranche extends Base {
      * @return array
      * @throws Exception
      */
-    public function getTranchesNumByCategories(array $categoriesIds, int $dashboardId) : array {
-
+    public function getTranchesNumByCategories(array $categoriesIds, int $dashboardId) : array
+    {
         $categoriesIdsStr = implode(', ', $categoriesIds);
 
         $sql = "

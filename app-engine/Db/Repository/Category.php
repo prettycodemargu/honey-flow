@@ -22,8 +22,8 @@ class Category extends Base {
      * @return array
      * @throws Exception
      */
-    public function getCategories(int $dashboardId, bool $orderDesc = false) : array {
-
+    public function getCategories(int $dashboardId, bool $orderDesc = false) : array
+    {
         $sql = "
             SELECT c.id, c.category_name, c.description FROM " . $this->table . " c
             INNER JOIN " . $this->linkTable . " l ON c.id=l.category_id
@@ -47,8 +47,8 @@ class Category extends Base {
      * @return int
      * @throws Exception
      */
-    public function addCategoryToDashboard(int $dashboardId, array $data) : int {
-
+    public function addCategoryToDashboard(int $dashboardId, array $data) : int
+    {
         $id = $this->add($data);
 
         $sql = "INSERT INTO " . $this->linkTable . " (dashboard_id, category_id) 
@@ -68,8 +68,8 @@ class Category extends Base {
      * @return bool
      * @throws Exception
      */
-    public function deleteCategoryFromDashboard(int $dashboradId, int $categoryId) : bool {
-
+    public function deleteCategoryFromDashboard(int $dashboradId, int $categoryId) : bool
+    {
         $sql = "DELETE FROM " . $this->linkTable . "
             WHERE dashboard_id = " . $dashboradId . "
             AND category_id = " . $categoryId . "
@@ -81,5 +81,4 @@ class Category extends Base {
 
         return true;
     }
-
 }

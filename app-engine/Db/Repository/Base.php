@@ -11,7 +11,8 @@ use Exception;
  * Class Base
  * @package Db\Repository
  */
-abstract class Base {
+abstract class Base
+{
 
     const ERROR_SQL_EXECUTE = 'An error occurred during SQL execution';
 
@@ -33,21 +34,24 @@ abstract class Base {
     /**
      * @return bool
      */
-    public function beginTransaction() : bool {
+    public function beginTransaction() : bool
+    {
         return $this->db->beginTransaction();
     }
 
     /**
      * @return bool
      */
-    public function commit() : bool {
+    public function commit() : bool
+    {
         return $this->db->commit();
     }
 
     /**
      * @return bool
      */
-    public function rollback() : bool {
+    public function rollback() : bool
+    {
         return $this->db->rollBack();
     }
 
@@ -56,8 +60,8 @@ abstract class Base {
      * @return int
      * @throws Exception
      */
-    public function add(array $data) : int {
-
+    public function add(array $data) : int
+    {
         foreach($data as $key => $value) {
             $data[$key] = $this->db->quote($value);
         }
@@ -83,8 +87,8 @@ abstract class Base {
      * @return array
      * @throws Exception
      */
-    public function get(int $id = 0, int $limit = 0, int $offset = 0) : array {
-
+    public function get(int $id = 0, int $limit = 0, int $offset = 0) : array
+    {
         $sql = "SELECT * FROM " . $this->table;
         $sql .= " WHERE";
 
@@ -119,8 +123,8 @@ abstract class Base {
      * @return bool
      * @throws Exception
      */
-    public function edit(int $id, array $data) : bool {
-
+    public function edit(int $id, array $data) : bool
+    {
         $valueSet = [];
         foreach ($data as $key => $value)
         {
@@ -147,8 +151,8 @@ abstract class Base {
      * @return bool
      * @throws Exception
      */
-    public function delete(int $id) : bool {
-
+    public function delete(int $id) : bool
+    {
         $sql = "UPDATE " . $this->table . " SET is_deleted=1" .
             " WHERE id=" . $id;
 
