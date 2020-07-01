@@ -30,9 +30,7 @@ class CategoriesPage extends React.Component {
     saveCategory = (category) => {
         EntityCategory.addCategoryToDashboard(this.props.match.params.dashboard_id, category)
             .then((response) => {
-                if (response.success) {
-                    category.id = response.result_data.id.slice();
-                }
+                category.id = response;
             });
 
         this.setState({

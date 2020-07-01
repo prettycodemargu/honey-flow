@@ -31,6 +31,8 @@ class Plan extends Base {
             throw new Exception(self::ERROR_SQL_EXECUTE);
         }
 
-        return $query->fetch(\PDO::FETCH_ASSOC);
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
+
+        return $result ? $result : [];
     }
 }

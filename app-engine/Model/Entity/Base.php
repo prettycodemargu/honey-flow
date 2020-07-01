@@ -10,16 +10,13 @@ use Db\Repository\Base as BaseRepository;
  * Class Base
  * @package Model\Entity
  */
-abstract class Base {
-
+abstract class Base
+{
     const CURRENCY_DIGITAL_CODE = 643; //руб
     const LIMIT = 10;
 
     const ERROR_REQUIRED_FIELD_ABSENTS = 'The field is required: ';
     const ERROR_FIELD_NOT_ALLOWED = 'The field is not allowed: ';
-
-    const ERROR_EMPTY_SET = 'Empty set';
-    const ERROR_EMPTY_ID = 'Empty id';
 
     protected BaseRepository $repository;
 
@@ -28,8 +25,7 @@ abstract class Base {
     protected array $fieldsNonRequired = [];
 
     protected array $defaultResult = [
-        'success' => false,
-        'error' => '',
+        'status' => 200,
         'result_data' => null
     ];
 
@@ -47,8 +43,8 @@ abstract class Base {
      * @param array $data
      * @return string
      */
-    protected function validateAndImproveFields(array &$data) : string {
-
+    protected function validateAndImproveFields(array &$data) : string
+    {
         foreach($this->fieldsRequired as $fieldName => $defaultValue)
         {
             if (!isset($data[$fieldName])) {
@@ -78,28 +74,29 @@ abstract class Base {
      * data - массив со значениями полей сущности
      * @return array
      */
-    public function add(array $params) : array {
-
+    public function add(array $params) : array
+    {
         $result = $this->defaultResult;
 
         if (empty($params['data'])) {
-            $result['error'] = self::ERROR_EMPTY_SET;
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
 
         $data = $params['data'];
 
-        if ($result['error'] = $this->validateAndImproveFields($data)) {
+        if ($error = $this->validateAndImproveFields($data)) {
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
 
         try {
             $result['result_data']['id'] = $this->repository->add($data);
-            $result['success'] = true;
         } catch (\Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
         }
 
+        $result['status'] = HTTP_CREATED;
         return $result;
     }
 
@@ -122,9 +119,8 @@ abstract class Base {
 
         try {
             $result['result_data'] = $this->repository->get($id, $limit, $offset);
-            $result['success'] = true;
         } catch (\Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
         }
 
         return $result;
@@ -139,12 +135,12 @@ abstract class Base {
         $result = $this->defaultResult;
 
         if (empty($params['conditions']['id'])) {
-            $result['error'] = self::ERROR_EMPTY_ID;
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
 
         if (empty($params['data'])) {
-            $result['error'] = self::ERROR_EMPTY_SET;
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
 
@@ -153,15 +149,19 @@ abstract class Base {
         foreach ($params['data'] as $key => $value)
         {
             if (!isset($allowedFields[$key])) {
-                $result['error'] = self::ERROR_FIELD_NOT_ALLOWED . $key;
+                $result['status'] = HTTP_BAD_REQUEST;
                 return $result;
             }
         }
 
         try {
-            $result['success'] = $this->repository->edit($params['conditions']['id'], $params['data']);
+            if ($this->repository->edit($params['conditions']['id'], $params['data'])) {
+                $result['status'] = HTTP_ACCEPTED;
+            } else {
+                $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
+            }
         } catch (\Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
         }
 
         return $result;
@@ -176,17 +176,17 @@ abstract class Base {
         $result = $this->defaultResult;
 
         if (empty($params['conditions']['id'])) {
-            $result['error'] = self::ERROR_EMPTY_ID;
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
 
         try {
             $this->repository->delete($params['conditions']['id']);
-            $result['success'] = true;
         } catch (\Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
         }
 
+        $result['status'] = HTTP_NO_CONTENT;
         return $result;
     }
 }

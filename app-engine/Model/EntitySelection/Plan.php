@@ -12,14 +12,15 @@ use Exception;
  * Class Plan
  * @package Model\EntitySelection
  */
-class Plan extends Base {
-
+class Plan extends Base
+{
     private PlanRepository $planRepository;
     private Tranche $trancheRepository;
     private Spending $spendingRepository;
     private Category $categoryRepository;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->planRepository = new PlanRepository();
         $this->trancheRepository = new Tranche();
         $this->spendingRepository = new Spending();
@@ -30,7 +31,8 @@ class Plan extends Base {
      * @param array $params
      * @return array
      */
-    public function getSelection(array $params) : array {
+    public function get(array $params) : array
+    {
        $planId = $params['conditions']['id'];
        $result = $this->defaultResult;
 
@@ -54,25 +56,23 @@ class Plan extends Base {
            ];
 
        } catch (\Error $error) {
-           $result['error'] = $error->getMessage();
+           $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
            return $result;
        } catch (Exception $ex) {
-           $result['error'] = $ex->getMessage();
+           $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
            return $result;
        }
 
-       $result['success'] = true;
        return $result;
     }
-
 
     /**
      * @param array $plan
      * @return array
      * @throws Exception
      */
-    private function getTranches(array $plan) : array {
-
+    private function getTranches(array $plan) : array
+    {
         $tranches = $this->trancheRepository->getTranches($plan['id']);
 
         if (!$tranches) {

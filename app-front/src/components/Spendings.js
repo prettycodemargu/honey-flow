@@ -66,20 +66,17 @@ class Spendings extends React.Component{
         fetch('http://honey-flow.local/api/Entity/Spending', request)
             .then(response => response.json())
             .then(response => {
-                console.log('response', response);
-                if (response.success) {
-                    newSpending = {
-                        name: this.state.name.slice(),
-                        amount: this.state.amount.slice(),
-                        id: response.result_data.id
-                    };
+                newSpending = {
+                    name: this.state.name.slice(),
+                    amount: this.state.amount.slice(),
+                    id: response.result_data.id
+                };
 
-                    this.setState({
-                        name : "",
-                        amount : "",
-                        newSpendings : [newSpending, ...this.state.newSpendings]
-                    })
-                }
+                this.setState({
+                    name : "",
+                    amount : "",
+                    newSpendings : [newSpending, ...this.state.newSpendings]
+                })
             });
     }
 

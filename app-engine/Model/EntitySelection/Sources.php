@@ -9,7 +9,8 @@ use Db\Repository\Source;
  * Class Sources
  * @package Model\EntitySelection
  */
-class Sources extends Base {
+class Sources extends Base
+{
 
     private Source $sourceRepository;
     private Income $incomeRepository;
@@ -27,12 +28,13 @@ class Sources extends Base {
      * @param array $params
      * @return array
      */
-    public function getSelection(array $params) : array {
+    public function get(array $params) : array
+    {
         $result = $this->defaultResult;
         $dashboardId = $params['conditions']['id'];
 
         if (!is_numeric($dashboardId)) {
-            $result['error'] = self::ERROR_WRONG_PARAM_TYPE;
+            $result['status'] = HTTP_BAD_REQUEST;
         }
 
         try {
@@ -46,14 +48,13 @@ class Sources extends Base {
 
             $result['result_data']['sources'] = $sources;
         } catch (\Error $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
             return $result;
         } catch (\ Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
             return $result;
         }
 
-        $result['success'] = true;
         return $result;
     }
 }

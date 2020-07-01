@@ -12,12 +12,10 @@ namespace Model\EntitySelection;
 abstract class Base
 {
     protected array $defaultResult = [
-        'success' => false,
-        'error' => '',
+        'status' => HTTP_OK,
         'result_data' => null
     ];
 
-    const ERROR_WRONG_PARAM_TYPE = 'Неверный тип переданного параметра';
 
     /**
      * Главный метод для получения набора сущностей для последующей визуализации
@@ -25,5 +23,5 @@ abstract class Base
      * @param array $params
      * @return array
      */
-    abstract public function getSelection(array $params) : array;
+    abstract public function get(array $params) : array;
 }

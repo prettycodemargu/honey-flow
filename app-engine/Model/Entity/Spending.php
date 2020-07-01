@@ -24,7 +24,8 @@ class Spending extends Base
         'is_deleted' => '',
     ];
 
-    protected function setRepository() {
+    protected function setRepository()
+    {
         $this->repository = new Repository();
     }
 }

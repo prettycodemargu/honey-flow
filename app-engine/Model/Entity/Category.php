@@ -21,43 +21,55 @@ class Category extends Base
         'is_deleted' => '',
     ];
 
-    protected function setRepository() {
+    protected function setRepository()
+    {
         $this->repository = new Repository();
     }
 
-    const ERROR_EMPTY_DASHBOARD_ID = "Empty dashboard id";
+    public function add(array $params) : array
+    {
+        if (($params['conditions']['dashboard_id'] ?? '')) {
+            return $this->addCategoryToDashboard($params);
+        }
+
+        return parent::add($params);
+    }
+
+    public function delete(array $params) : array
+    {
+        if (($params['conditions']['dashboard_id'] ?? '')) {
+            return $this->deleteCategoryFromDashboard($params);
+        }
+
+        return parent::delete($params);
+    }
 
     /**
      * @param array $params
      * @return array
      */
-    public function addCategoryToDashboard(array $params) : array {
-
-        if (empty($params['conditions']['dashboard_id'])) {
-            $result['error'] = self::ERROR_EMPTY_DASHBOARD_ID;
+    private function addCategoryToDashboard(array $params) : array
+    {
+        if (empty($params['conditions']['dashboard_id']) || empty($params['data'])) {
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
         $dashboardId = $params['conditions']['dashboard_id'];
-
-        if (empty($params['data'])) {
-            $result['error'] = self::ERROR_EMPTY_SET;
-            return $result;
-        }
         $data = $params['data'];
 
         $result = $this->defaultResult;
 
-        if ($result['error'] = $this->validateAndImproveFields($data)) {
+        if ($error = $this->validateAndImproveFields($data)) {
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
 
         $this->repository->beginTransaction();
         try {
             $result['result_data']['id'] = $this->repository->addCategoryToDashboard($dashboardId, $data);
-            $result['success'] = true;
             $this->repository->commit();
         } catch (\Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
             $this->repository->rollback();
         }
 
@@ -68,18 +80,14 @@ class Category extends Base
      * @param array $params
      * @return array
      */
-    public function deleteCategoryFromDashboard(array $params) : array {
-
-        if (empty($params['conditions']['dashboard_id'])) {
-            $result['error'] = self::ERROR_EMPTY_DASHBOARD_ID;
+    public function deleteCategoryFromDashboard(array $params) : array
+    {
+        if (empty($params['conditions']['dashboard_id']) || empty($params['conditions']['id'])) {
+            $result['status'] = HTTP_BAD_REQUEST;
             return $result;
         }
         $dashboardId = $params['conditions']['dashboard_id'];
 
-        if (empty($params['conditions']['id'])) {
-            $result['error'] = self::ERROR_EMPTY_ID;
-            return $result;
-        }
         $categoryId = $params['conditions']['id'];
 
         $result = $this->defaultResult;
@@ -87,13 +95,13 @@ class Category extends Base
         $this->repository->beginTransaction();
         try {
             $result['result_data']['id'] = $this->repository->deleteCategoryFromDashboard($dashboardId, $categoryId);
-            $result['success'] = true;
             $this->repository->commit();
         } catch (\Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
             $this->repository->rollback();
         }
 
+        $result['status'] = HTTP_NO_CONTENT;
         return $result;
     }
 }

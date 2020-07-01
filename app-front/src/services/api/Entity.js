@@ -2,7 +2,7 @@ import * as Constants from "../../constants.js";
 
 class Entity {
 
-     static add (entityName, data) {
+     static add(entityName, data) {
 
         const requestOptions = {
             method : "POST",
@@ -13,29 +13,17 @@ class Entity {
        return fetch(Constants.API_URL_ENTITY + '/' + entityName, requestOptions)
             .then((response) => response.json())
             .then((response) => {
-                let id = 0;
-                if (response.success) {
-                    id = response.result_data.id;
-                }
-                return id;
+                return response.id;
             });
     }
 
-    static deleteEntity (entityName, id) {
+    static deleteEntity(entityName, id) {
         const requestOptions = {
-            method : "POST",
+            method : "DELETE",
             headers : {"Content-Type" : "application/json"}
         };
 
-        fetch(Constants.API_URL_ENTITY + '/' + entityName + '/' + id + '?method=delete', requestOptions)
-            .then((response) => response.json())
-            .then((response) => {
-                if (response.success) {
-                    return true;
-                }
-            });
-
-        return false;
+        return fetch(Constants.API_URL_ENTITY + '/' + entityName + '/' + id, requestOptions);
     }
 
 }

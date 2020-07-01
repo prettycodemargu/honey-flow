@@ -27,33 +27,32 @@ class Requests
      */
     public function getMethod() : string
     {
-        if (($_REQUEST['method'] ?? ''))
-        {
-            // delete и прочие методы типа getSpendingAfterDate
-            return $_REQUEST['method'];
-        }
-
         if ($_SERVER['REQUEST_METHOD'] == 'GET')
         {
             return 'get';
         }
 
-        $parts = explode('/', $_SERVER['REQUEST_URI']);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            return 'add';
+        }
 
-        if (is_numeric($parts[3] ?? ''))
-        {
+        if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
             return 'edit';
         }
 
-        return 'add';
+        if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+            return 'delete';
+        }
+
+        return '';
     }
 
     /**
      * @param array $path
      * @param string $queryStr
-     * @return string
+     * @return array
      */
-    public function handleRequest(array $path, string $queryStr) : string
+    public function handleRequest(array $path, string $queryStr) : array
     {
         $method = $this->getMethod();
 
@@ -77,19 +76,26 @@ class Requests
                     $resultRaw = call_user_func_array([$module, $method], [$params] ?? []);
 
                     if ($resultRaw === false) {
-                        return json_encode('Error in params!');
+                        return [
+                            'status' => HTTP_BAD_REQUEST,
+                            'result_data' => ''
+                        ];
                     }
 
-                    return json_encode($resultRaw);
-
+                    return $resultRaw;
                 }
                 catch (\Error $e)
                 {
-                    return json_encode($e->getMessage());
+                    return [
+                        'status' => HTTP_INTERNAL_SERVER_ERROR,
+                        'result_data' => ''
+                    ];
                 }
             }
-            return json_encode('Method not found');
         }
-        return json_encode('Class not found');
+        return [
+            'status' => HTTP_BAD_REQUEST,
+            'result_data' => ''
+        ];
     }
 }

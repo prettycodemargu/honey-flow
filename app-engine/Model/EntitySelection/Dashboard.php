@@ -37,12 +37,13 @@ class Dashboard extends Base
      * @param array $params
      * @return array
      */
-    public function getSelection(array $params) : array {
+    public function get(array $params) : array
+    {
         $result = $this->defaultResult;
         $dashboardId = $params['conditions']['id'];
 
         if (!is_numeric($dashboardId)) {
-            $result['error'] = self::ERROR_WRONG_PARAM_TYPE;
+            $result['status'] = HTTP_BAD_REQUEST;
         }
 
         try {
@@ -71,14 +72,13 @@ class Dashboard extends Base
             ];
 
         } catch (\Error $error) {
-            $result['error'] = $error->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
             return $result;
         } catch (Exception $e) {
-            $result['error'] = $e->getMessage();
+            $result['status'] = HTTP_INTERNAL_SERVER_ERROR;
             return $result;
         }
 
-        $result['success'] = true;
         return $result;
     }
 
@@ -89,8 +89,8 @@ class Dashboard extends Base
      * @return array
      * @throws Exception
      */
-    private function getSpendingsByPeriod(int $dashboardId, string $dateStart, string $dateEnd) : array {
-
+    private function getSpendingsByPeriod(int $dashboardId, string $dateStart, string $dateEnd) : array
+    {
         $rawGroups = $this->spendingRepository->getSpendingsGroupsByPeriod($dashboardId, $dateStart, $dateEnd);
 
         $spendingsGroups = [];

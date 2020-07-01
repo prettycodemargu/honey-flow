@@ -49,6 +49,7 @@ class MainPage extends React.Component {
                         {this.state.spendingsGroups.map(spendingGroup => {
                             return (
                                 <Spendings
+                                    key={spendingGroup.category_id}
                                     dashboardId={this.props.dashboardId}
                                     spendingGroup={spendingGroup}
                                     currencies={this.state.currencies}

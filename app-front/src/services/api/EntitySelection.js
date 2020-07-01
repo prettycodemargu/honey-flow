@@ -9,15 +9,11 @@ class EntitySelection {
             headers : {"Content-Type" : "application/json"}
         };
 
-        return fetch(Constants.API_URL_ENTITY_SELECTION + '/' + selectionName + '?method=getSelection&id=' + id,
+        return fetch(Constants.API_URL_ENTITY_SELECTION + '/' + selectionName + '?id=' + id,
             requestOptions)
             .then((response) => response.json())
             .then((response) => {
-                let result = [];
-                if (response.success) {
-                    result = response.result_data;
-                }
-                return result;
+                return response;
             });
     }
 }
